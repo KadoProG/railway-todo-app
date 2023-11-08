@@ -1,22 +1,23 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, Redirect } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { signIn } from '../authSlice'
 import { Header } from '../components/Header'
 import { url } from '../const'
-import './signUp.css'
+import './signUp.scss'
 
 export const SignUp = () => {
-  const history = useHistory()
+  const navigation = useNavigate()
   const auth = useSelector((state) => state.auth.isSignIn)
   const dispatch = useDispatch()
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessge] = useState()
-  const [cookies, setCookie, removeCookie] = useCookies()
+  // eslint-disable-next-line
+  const [cookies, setCookie] = useCookies()
   const handleEmailChange = (e) => setEmail(e.target.value)
   const handleNameChange = (e) => setName(e.target.value)
   const handlePasswordChange = (e) => setPassword(e.target.value)
@@ -33,13 +34,13 @@ export const SignUp = () => {
         const token = res.data.token
         dispatch(signIn())
         setCookie('token', token)
-        history.push('/')
+        navigation('/')
       })
       .catch((err) => {
         setErrorMessge(`サインアップに失敗しました。 ${err}`)
       })
 
-    if (auth) return <Redirect to="/" />
+    if (auth) return <Navigate to="/" state={{ permanent: false }} />
   }
   return (
     <div>

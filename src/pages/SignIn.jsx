@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
-import { Redirect, useHistory, Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { Header } from '../components/Header'
-import './signin.css'
+import './signin.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { signIn } from '../authSlice'
 import { url } from '../const'
@@ -11,27 +11,29 @@ import { url } from '../const'
 export const SignIn = () => {
   const auth = useSelector((state) => state.auth.isSignIn)
   const dispatch = useDispatch()
-  const history = useHistory()
+  const navigation = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState()
-  const [cookies, setCookie, removeCookie] = useCookies()
+  // eslint-disable-next-line
+  const [cookies, setCookie] = useCookies()
   const handleEmailChange = (e) => setEmail(e.target.value)
   const handlePasswordChange = (e) => setPassword(e.target.value)
+
   const onSignIn = () => {
     axios
       .post(`${url}/signin`, { email: email, password: password })
       .then((res) => {
         setCookie('token', res.data.token)
         dispatch(signIn())
-        history.push('/')
+        navigation('/')
       })
       .catch((err) => {
         setErrorMessage(`サインインに失敗しました。${err}`)
       })
   }
 
-  if (auth) return <Redirect to="/" />
+  if (auth) return <Navigate to="/" state={{ permanent: false }} />
 
   return (
     <div>
@@ -45,6 +47,7 @@ export const SignIn = () => {
           <input
             type="email"
             className="email-input"
+            value={email}
             onChange={handleEmailChange}
           />
           <br />
@@ -53,6 +56,7 @@ export const SignIn = () => {
           <input
             type="password"
             className="password-input"
+            value={password}
             onChange={handlePasswordChange}
           />
           <br />

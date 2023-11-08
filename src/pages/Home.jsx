@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import { Header } from '../components/Header'
 import { url } from '../const'
-import './home.css'
+import './home.scss'
 
 export const Home = () => {
   const [isDoneDisplay, setIsDoneDisplay] = useState('todo') // todo->未完了 done->完了
@@ -124,13 +124,20 @@ export const Home = () => {
 
 // 表示するタスク
 const Tasks = (props) => {
-  const { tasks, selectListId, isDoneDisplay } = props.tasks
+  // eslint-disable-next-line
+  const tasks = props.tasks
+  // eslint-disable-next-line
+  const selectListId = props.selectListId
+  // eslint-disable-next-line
+  const isDoneDisplay = props.isDoneDisplay
+  // const { tasks, selectListId, isDoneDisplay } = props
   if (tasks === null) return <></>
 
   if (isDoneDisplay == 'done') {
     return (
       <ul>
         {tasks
+          // eslint-disable-next-line
           .filter((task) => {
             return task.done === true
           })
@@ -153,6 +160,7 @@ const Tasks = (props) => {
   return (
     <ul>
       {tasks
+        // eslint-disable-next-line
         .filter((task) => {
           return task.done === false
         })
