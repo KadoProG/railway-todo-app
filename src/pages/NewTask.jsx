@@ -11,17 +11,24 @@ export const NewTask = () => {
   const [lists, setLists] = useState([])
   const [title, setTitle] = useState('')
   const [detail, setDetail] = useState('')
+  const [limit, setLimit] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [cookies] = useCookies()
   const navigation = useNavigate()
   const handleTitleChange = (e) => setTitle(e.target.value)
   const handleDetailChange = (e) => setDetail(e.target.value)
   const handleSelectList = (id) => setSelectListId(id)
-  const onCreateTask = () => {
+  const handleLimitChange = (e) => setLimit(e.target.value)
+
+  const onCreateTask = (e) => {
+    e.preventDefault()
+
+    const strLimit = limit !== '' ? new Date(limit).toISOString() : ''
     const data = {
       title: title,
       detail: detail,
       done: false,
+      limit: strLimit,
     }
 
     axios
@@ -60,7 +67,7 @@ export const NewTask = () => {
       <main className="new-task">
         <h2>タスク新規作成</h2>
         <p className="error-message">{errorMessage}</p>
-        <form className="new-task-form">
+        <form className="new-task-form" onSubmit={onCreateTask}>
           <label>リスト</label>
           <br />
           <select
@@ -90,11 +97,18 @@ export const NewTask = () => {
             className="new-task-detail"
           />
           <br />
-          <button
-            type="button"
-            className="new-task-button"
-            onClick={onCreateTask}
-          >
+          <div>
+            <label>期限</label>
+            <br />
+            <input
+              type={'datetime-local'}
+              value={limit}
+              onChange={handleLimitChange}
+            />
+          </div>
+          <br />
+          <br />
+          <button type="submit" className="new-task-button">
             作成
           </button>
         </form>

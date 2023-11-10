@@ -1,10 +1,13 @@
 @charset "utf-8";
 
 .signin {
-  width: 500px;
+  box-sizing: border-box;
+  max-width: 500px;
+  width: 100%;
   margin: 0 auto;
   &-form {
     margin: 25px 0;
+    padding: 4px;
   }
   &-button {
     background-color: #242f9b;
@@ -22,6 +25,7 @@
 
 .email-input,
 .password-input {
+  box-sizing: border-box;
   width: 100%;
   font-size: large;
   height: 30px;

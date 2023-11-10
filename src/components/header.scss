@@ -5,6 +5,18 @@
   color: #ffffff;
   display: flex;
   justify-content: space-between;
+  &__title {
+    height: 100%;
+    color: #ffffff;
+    text-decoration: none;
+    &:hover {
+      background: #4c55b4;
+    }
+    & h1 {
+      line-height: 80px;
+      cursor: pointer;
+    }
+  }
 }
 
 .sign-out-button {

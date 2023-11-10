@@ -20,7 +20,8 @@ export const SignIn = () => {
   const handleEmailChange = (e) => setEmail(e.target.value)
   const handlePasswordChange = (e) => setPassword(e.target.value)
 
-  const onSignIn = () => {
+  const onSignIn = (e) => {
+    e.preventDefault()
     axios
       .post(`${url}/signin`, { email: email, password: password })
       .then((res) => {
@@ -41,11 +42,11 @@ export const SignIn = () => {
       <main className="signin">
         <h2>サインイン</h2>
         <p className="error-message">{errorMessage}</p>
-        <form className="signin-form">
+        <form className="signin-form" onSubmit={onSignIn}>
           <label className="email-label">メールアドレス</label>
           <br />
           <input
-            type="email"
+            type="text"
             className="email-input"
             value={email}
             onChange={handleEmailChange}
@@ -60,7 +61,7 @@ export const SignIn = () => {
             onChange={handlePasswordChange}
           />
           <br />
-          <button type="button" className="signin-button" onClick={onSignIn}>
+          <button type="submit" className="signin-button">
             サインイン
           </button>
         </form>

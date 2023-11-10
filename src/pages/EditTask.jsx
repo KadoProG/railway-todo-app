@@ -13,16 +13,22 @@ export const EditTask = () => {
   const [title, setTitle] = useState('')
   const [detail, setDetail] = useState('')
   const [isDone, setIsDone] = useState()
+  const [limit, setLimit] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const handleTitleChange = (e) => setTitle(e.target.value)
   const handleDetailChange = (e) => setDetail(e.target.value)
   const handleIsDoneChange = (e) => setIsDone(e.target.value === 'done')
-  const onUpdateTask = () => {
-    console.log(isDone)
+  const handleLimitChange = (e) => setLimit(e.target.value)
+
+  const onUpdateTask = (e) => {
+    e.preventDefault()
+
+    const strLimit = limit !== '' ? new Date(limit).toISOString() : ''
     const data = {
       title: title,
       detail: detail,
       done: isDone,
+      limit: strLimit,
     }
 
     axios
@@ -32,7 +38,7 @@ export const EditTask = () => {
         },
       })
       .then((res) => {
-        console.log(res.data)
+        console.log(res)
         navigation('/')
       })
       .catch((err) => {
@@ -67,11 +73,33 @@ export const EditTask = () => {
         setTitle(task.title)
         setDetail(task.detail)
         setIsDone(task.done)
+        const date = new Date(task.limit)
+        const str = toISOStringWithTimezone(date)
+        setLimit(str.substring(0, 16))
       })
       .catch((err) => {
         setErrorMessage(`タスク情報の取得に失敗しました。${err}`)
       })
   }, [])
+
+  // JSTのISO 8601表現にする関数（引数: date: Date型）
+  function toISOStringWithTimezone(date) {
+    const pad = function (str) {
+      return ('0' + str).slice(-2)
+    }
+    const year = date.getFullYear().toString()
+    const month = pad((date.getMonth() + 1).toString())
+    const day = pad(date.getDate().toString())
+    const hour = pad(date.getHours().toString())
+    const min = pad(date.getMinutes().toString())
+    const sec = pad(date.getSeconds().toString())
+    const tz = -date.getTimezoneOffset()
+    const sign = tz >= 0 ? '+' : '-'
+    const tzHour = pad((tz / 60).toString())
+    const tzMin = pad((tz % 60).toString())
+
+    return `${year}-${month}-${day}T${hour}:${min}:${sec}${sign}${tzHour}:${tzMin}`
+  }
 
   return (
     <div>
@@ -79,7 +107,7 @@ export const EditTask = () => {
       <main className="edit-task">
         <h2>タスク編集</h2>
         <p className="error-message">{errorMessage}</p>
-        <form className="edit-task-form">
+        <form className="edit-task-form" onSubmit={onUpdateTask}>
           <label>タイトル</label>
           <br />
           <input
@@ -118,6 +146,16 @@ export const EditTask = () => {
             />
             完了
           </div>
+          <br />
+          <div>
+            <label>期限</label>
+            <br />
+            <input
+              type={'datetime-local'}
+              value={limit}
+              onChange={handleLimitChange}
+            />
+          </div>
           <button
             type="button"
             className="delete-task-button"
@@ -125,11 +163,7 @@ export const EditTask = () => {
           >
             削除
           </button>
-          <button
-            type="button"
-            className="edit-task-button"
-            onClick={onUpdateTask}
-          >
+          <button type="submit" className="edit-task-button">
             更新
           </button>
         </form>
