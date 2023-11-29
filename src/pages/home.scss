@@ -15,8 +15,11 @@
   }
   &-tab {
     list-style: none;
-    display: flex;
+    display: inline-flex;
     overflow-x: auto;
+    &:focus-within {
+      outline: -webkit-focus-ring-color auto 1px;
+    }
     &-item {
       flex-shrink: 0;
       min-width: 110px;
@@ -24,6 +27,22 @@
       margin-right: 5px;
       text-align: center;
       border: solid 1px #242f9b;
+      & input[type='radio'] {
+        /* 透明度0 */
+        filter: alpha(opacity=0);
+        -moz-opacity: 0;
+        opacity: 0;
+        /* ブラウザのデフォルトのスタイルを削除 */
+        -webkit-appearance: none;
+        appearance: none;
+        /* レイアウトから無視 */
+        position: fixed;
+        &:focus-visible {
+          & + label {
+            box-shadow: 0 0 0 2px blue;
+          }
+        }
+      }
     }
   }
 }

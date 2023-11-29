@@ -21,5 +21,8 @@
 
 .sign-out-button {
   color: #ffffff;
-  margin: auto 25px auto auto;
+  margin-right: 25px;
+  &:focus-visible {
+    outline: #fff auto 1px;
+  }
 }

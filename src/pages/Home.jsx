@@ -91,6 +91,12 @@ export const Home = () => {
                   className={`list-tab-item ${isActive ? 'active' : ''}`}
                   onClick={() => handleSelectList(list.id)}
                 >
+                  <input
+                    type="radio"
+                    name="list-tab-item"
+                    onChange={() => handleSelectList(list.id)}
+                    checked={selectListId === list.id}
+                  />
                   {list.title}
                 </li>
               )
