@@ -39,9 +39,10 @@ export const SignUp = () => {
       .catch((err) => {
         setErrorMessge(`サインアップに失敗しました。 ${err}`)
       })
-
-    if (auth) return <Navigate to="/" state={{ permanent: false }} />
   }
+
+  if (auth) return <Navigate to="/" state={{ permanent: false }} />
+
   return (
     <div>
       <Header />
